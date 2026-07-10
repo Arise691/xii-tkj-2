@@ -295,6 +295,61 @@
         .aspirasi-card { padding:16px; border-radius:16px; border:1px solid var(--border-glow); background: rgba(255,255,255,0.015); margin-bottom:12px; }
         .empty-state { text-align:center; padding:40px 20px; color: var(--text-secondary); font-style:italic; }
         .cloud-warn { padding:16px; border-radius:14px; background: rgba(251,191,36,.08); border:1px solid rgba(251,191,36,.25); color: var(--accent-gold); font-size:.88rem; margin-bottom:16px; }
+
+        /* ===== MOBILE FIXES ===== */
+        @media (max-width: 640px) {
+            nav { padding: 12px 16px; }
+            .nav-brand { font-size: 1.02rem; }
+            .nav-right { gap: 8px; }
+            .btn-icon { width: 38px; height: 38px; }
+            #userInfo span { max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+            #btnLogin { padding: 9px 12px !important; font-size: .82rem; }
+
+            main, .metrics-grid, .layout-shell, footer { padding-left: 14px; padding-right: 14px; }
+            .hero-banner { margin: 18px auto 18px; padding: 22px 18px; border-radius: 20px; }
+            .hero-banner h1 { font-size: 1.5rem; letter-spacing: -0.5px; }
+            .hero-banner p { font-size: .92rem; }
+
+            .metrics-grid { grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+            .metric-card { padding: 16px; border-radius: 16px; }
+            .metric-data h3 { font-size: 1.5rem; }
+            .metric-icon { width: 42px; height: 42px; font-size: 1.05rem; }
+
+            .layout-shell { gap: 14px; }
+            .panel-container { padding: 18px 16px; border-radius: 18px; }
+            .panel-header h2 { font-size: 1rem; }
+            .section-title { font-size: 1.15rem; }
+
+            .form-row > * { min-width: 100%; }
+            .btn-cluster { flex-direction: column; }
+            .btn-cluster .btn-core { width: 100%; justify-content: center; }
+
+            .jadwal-row { flex-wrap: wrap; gap: 6px 16px; }
+            .jadwal-jam { width: auto; }
+            .jadwal-guru { width: 100%; }
+
+            .rank-item { padding: 11px 14px; flex-wrap: wrap; gap: 6px; }
+
+            .gallery-grid { grid-template-columns: 1fr; gap: 16px; }
+            .gallery-card { height: 180px; }
+
+            .org-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .org-card { padding: 18px 10px; }
+
+            .balance-banner h2 { font-size: 1.7rem; }
+
+            table { min-width: 400px; }
+            th, td { padding: 10px 12px; font-size: .82rem; }
+
+            footer .panel-container { flex-direction: column; text-align: center !important; }
+            footer .panel-container > div:last-child { margin-left: 0 !important; }
+        }
+
+        @media (max-width: 400px) {
+            .metrics-grid { grid-template-columns: 1fr; }
+            .org-grid { grid-template-columns: 1fr 1fr; }
+            .hero-banner h1 { font-size: 1.3rem; }
+        }
     </style>
 </head>
 <body>
