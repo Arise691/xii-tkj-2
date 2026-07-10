@@ -71,31 +71,61 @@
             position: relative;
         }
 
-        #auroraBg { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; }
+        #auroraBg { position: fixed; inset: 0; z-index: -5; overflow: hidden; pointer-events: none; }
         .aurora-blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .38; mix-blend-mode: screen; will-change: transform; }
         body.light-theme .aurora-blob { opacity: .15; mix-blend-mode: normal; }
         .blob-1 { width: 38vw; height: 38vw; top: -10%; left: -8%; background: var(--accent-indigo); animation: auroraDrift 22s ease-in-out infinite; }
         .blob-2 { width: 32vw; height: 32vw; top: 30%; right: -10%; background: var(--accent-cyan); animation: auroraDrift 26s ease-in-out infinite reverse; animation-delay: -4s; }
         .blob-3 { width: 30vw; height: 30vw; bottom: -12%; left: 22%; background: var(--accent-violet); animation: auroraDrift 30s ease-in-out infinite; animation-delay: -10s; }
+        .blob-4 { width: 22vw; height: 22vw; top: 55%; left: 46%; background: var(--accent-gold); opacity: .18; animation: auroraDrift 34s ease-in-out infinite reverse; animation-delay: -16s; }
+        .blob-5 { width: 26vw; height: 26vw; top: 5%; left: 55%; background: #ff2d6a; opacity: .16; animation: auroraDrift 28s ease-in-out infinite; animation-delay: -8s; }
+        .blob-6 { width: 24vw; height: 24vw; bottom: 5%; right: 8%; background: var(--accent-green); opacity: .15; animation: auroraDrift 32s ease-in-out infinite reverse; animation-delay: -20s; }
+        body.light-theme .blob-4, body.light-theme .blob-5, body.light-theme .blob-6 { opacity: .09; }
         @keyframes auroraDrift { 0%{transform:translate(0,0) scale(1);} 33%{transform:translate(4vw,-3vw) scale(1.12);} 66%{transform:translate(-3vw,3vw) scale(.92);} 100%{transform:translate(0,0) scale(1);} }
 
+        /* Drifting data-particle starfield across the whole page — depth behind the content */
+        #particlesBg { position: fixed; inset: 0; z-index: -4; overflow: hidden; pointer-events: none; }
+        .data-particle { position: absolute; border-radius: 50%; will-change: transform, opacity; animation: particleFloat linear infinite, particleTwinkle ease-in-out infinite; }
+        @keyframes particleFloat { from { transform: translateY(0); } to { transform: translateY(-110vh); } }
+        @keyframes particleTwinkle { 0%,100% { opacity: .15; } 50% { opacity: .9; } }
+
+        /* Circuit-trace layer: faint PCB-style lines drifting behind content, echoing the TKJ networking theme */
+        #circuitBg { position: fixed; inset: 0; z-index: -3; overflow: hidden; pointer-events: none; opacity: .55; animation: circuitHue 16s linear infinite; }
+        body.light-theme #circuitBg { opacity: .25; }
+        #circuitBg svg { position: absolute; width: 140%; height: 140%; top: -20%; left: -20%; }
+        #circuitBg path { fill: none; stroke: url(#circuitGradient); stroke-width: 1.1; stroke-dasharray: 6 10; animation: circuitFlow 40s linear infinite; }
+        #circuitBg circle { fill: var(--accent-cyan); opacity: .6; animation: nodePulse 3.4s ease-in-out infinite; }
+        @keyframes circuitFlow { to { stroke-dashoffset: -800; } }
+        @keyframes nodePulse { 0%,100% { opacity: .25; } 50% { opacity: .85; } }
+        @keyframes circuitHue { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+
+        /* Vignette for depth/premium feel */
+        #vignette { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 0%, transparent 45%, rgba(var(--bg-main-rgb), .55) 100%); }
+
+        /* Ambient grid glow synced loosely to the RGB theme */
+        body { animation: gridPulse 10s ease-in-out infinite; }
+        @keyframes gridPulse { 0%,100% { background-size: 34px 34px; } 50% { background-size: 36px 36px; } }
+
         nav {
-            position: sticky; top: 0; z-index: 1000;
+            position: sticky; top: 3px; z-index: 1000;
             background: rgba(var(--bg-main-rgb), 0.66);
             backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
             border-bottom: 1px solid var(--border-glow);
             padding: 14px 30px; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap;
         }
+        #rgbStrip { position: fixed; top: 0; left: 0; z-index: 1001; height: 3px; width: 100%; background: linear-gradient(90deg, #ff003c, #ff8a00, #ffee00, #22d3ee, #6366f1, #a78bfa, #ff003c); background-size: 300% 100%; animation: rgbSweep 5s linear infinite; box-shadow: 0 0 12px rgba(99,102,241,.6), 0 0 24px rgba(34,211,238,.4); }
+        @keyframes rgbSweep { 0%{background-position:0% 50%;} 100%{background-position:300% 50%;} }
         .nav-brand {
             font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; letter-spacing: -.3px;
-            background: linear-gradient(95deg, var(--accent-indigo), var(--accent-cyan) 60%, var(--accent-violet));
-            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            display: flex; align-items: center; gap: 10px; animation: brandShine 6s linear infinite; white-space: nowrap;
+            background: linear-gradient(95deg, #ff003c, #ff8a00, #ffee00, #34d399, #22d3ee, #6366f1, #a78bfa, #ff003c);
+            background-size: 400% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            display: flex; align-items: center; gap: 10px; animation: brandShine 5s linear infinite; white-space: nowrap;
         }
-        @keyframes brandShine { 0%{background-position:0% 50%;} 100%{background-position:200% 50%;} }
+        .nav-brand i { -webkit-text-fill-color: initial; background: inherit; -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 6px rgba(99,102,241,.5)); }
+        @keyframes brandShine { 0%{background-position:0% 50%;} 100%{background-position:400% 50%;} }
         .nav-right { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
         .btn-icon { background: var(--card-surface); border: 1px solid var(--border-glow); color: var(--text-primary); width: 42px; height: 42px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .btn-icon:hover { border-color: var(--accent-indigo); box-shadow: var(--shadow-glow); transform: translateY(-2px) rotate(-6deg); }
+        .btn-icon:hover { border-color: var(--accent-indigo); box-shadow: 0 0 18px rgba(99,102,241,.5), 0 0 32px rgba(34,211,238,.3); transform: translateY(-2px) rotate(-6deg); }
         #userInfo { display: none; align-items: center; gap: 8px; font-weight: 700; color: var(--accent-green); font-size: .85rem; background: rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,.25); padding: 8px 14px; border-radius: 30px; }
         #userInfo img { width: 24px; height: 24px; border-radius: 50%; }
 
@@ -103,17 +133,24 @@
         .sheen::after { content: ''; position: absolute; top: 0; left: -150%; width: 60%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,0.14), transparent); transform: skewX(-18deg); transition: left .7s ease; pointer-events: none; }
         .sheen:hover::after { left: 150%; }
 
-        .hero-banner { max-width: 1500px; margin: 30px auto 26px; padding: 40px; background: radial-gradient(circle at var(--mx, 80%) var(--my, 0%), rgba(99,102,241,0.18), transparent 55%), var(--card-surface); border-radius: 26px; border: 1px solid var(--border-glow); position: relative; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
-        .hero-banner::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--accent-indigo), var(--accent-cyan), var(--accent-violet)); }
-        .hero-banner h1 { margin: 0; font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; }
-        .hero-banner p { color: var(--text-secondary); margin: 10px 0 0; font-size: 1.02rem; max-width: 760px; }
-        .badge-live { display: inline-flex; align-items: center; gap: 8px; background: rgba(52, 211, 153, 0.12); color: var(--accent-green); border: 1px solid rgba(52, 211, 153, 0.25); padding: 6px 14px; border-radius: 30px; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; margin: 0 8px 12px 0; }
+        .hero-banner { max-width: 1500px; margin: 30px auto 26px; padding: 40px; background: radial-gradient(circle at var(--mx, 80%) var(--my, 0%), rgba(99,102,241,0.18), transparent 55%), var(--card-surface); border-radius: 26px; border: 1px solid var(--border-glow); position: relative; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.25); isolation: isolate; }
+        .hero-banner::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--accent-indigo), var(--accent-cyan), var(--accent-violet)); z-index: 2; }
+        .hero-banner::after { content: ''; position: absolute; inset: -2px; border-radius: 26px; padding: 2px; background: conic-gradient(from var(--rot, 0deg), #ff003c, #ff8a00, #ffee00, #34d399, #22d3ee, #6366f1, #a78bfa, #ff003c); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: .8; animation: rotBorder 6s linear infinite; pointer-events: none; z-index: 1; filter: blur(.4px); }
+        .hero-banner { box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 0 60px rgba(99,102,241,.12); }
+        @keyframes rotBorder { to { --rot: 360deg; } }
+        @property --rot { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+        #heroNetCanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; opacity: .55; }
+        body.light-theme #heroNetCanvas { opacity: .3; }
+        .hero-banner h1 { margin: 0; font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; position: relative; z-index: 2; animation: heroGlowPulse 4s ease-in-out infinite; }
+        @keyframes heroGlowPulse { 0%,100% { text-shadow: 0 0 18px rgba(99,102,241,.25); } 50% { text-shadow: 0 0 22px rgba(34,211,238,.35), 0 0 34px rgba(167,139,250,.2); } }
+        .hero-banner p { color: var(--text-secondary); margin: 10px 0 0; font-size: 1.02rem; max-width: 760px; position: relative; z-index: 2; }
+        .badge-live { display: inline-flex; align-items: center; gap: 8px; background: rgba(52, 211, 153, 0.12); color: var(--accent-green); border: 1px solid rgba(52, 211, 153, 0.25); padding: 6px 14px; border-radius: 30px; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; margin: 0 8px 12px 0; box-shadow: 0 0 14px rgba(52,211,153,.25); }
         .badge-live span { width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; box-shadow: 0 0 8px var(--accent-green); animation: pulse 1.5s infinite; }
         .badge-vvip { display: inline-flex; align-items: center; gap: 8px; background: rgba(251,191,36,0.12); color: var(--accent-gold); border: 1px solid rgba(251,191,36,.28); padding: 6px 14px; border-radius: 30px; font-weight: 800; font-size: 0.72rem; margin: 0 0 12px 0; letter-spacing: .5px; }
 
         .metrics-grid { max-width: 1500px; margin: 0 auto 26px; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
         .metric-card { background: var(--card-surface); border: 1px solid var(--border-glow); border-radius: 20px; padding: 22px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(10px); }
-        .metric-card:hover { border-color: var(--accent-indigo); box-shadow: var(--shadow-glow); transform: translateY(-4px); }
+        .metric-card:hover { border-color: transparent; box-shadow: 0 0 0 1px rgba(99,102,241,.5), 0 0 22px rgba(255,0,60,.25), 0 0 34px rgba(34,211,238,.25), 0 0 46px rgba(167,139,250,.2); }
         .metric-data h3 { margin: 0; font-size: 2.1rem; font-weight: 800; font-family: var(--font-code); }
         .metric-data span { display: block; color: var(--text-secondary); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; margin-top: 4px; }
         .metric-icon { width: 52px; height: 52px; background: rgba(99,102,241,0.10); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: var(--accent-indigo); border: 1px solid rgba(99,102,241,0.18); flex-shrink:0; }
@@ -141,7 +178,9 @@
             #hamburgerBtn { display: flex; }
         }
 
-        .panel-container { background: var(--card-surface); border: 1px solid var(--border-glow); border-radius: 24px; padding: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); backdrop-filter: blur(12px); position: relative; margin-bottom: 24px; }
+        .panel-container { background: var(--card-surface); border: 1px solid var(--border-glow); border-radius: 24px; padding: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); backdrop-filter: blur(12px); position: relative; margin-bottom: 24px; overflow: hidden; }
+        .panel-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #ff003c, #ff8a00, #ffee00, #34d399, #22d3ee, #6366f1, #a78bfa, #ff003c); background-size: 300% 100%; animation: rgbSweep 6s linear infinite; opacity: .75; }
+        .panel-container:hover { border-color: rgba(99,102,241,0.4); box-shadow: 0 16px 40px rgba(0,0,0,0.18), 0 0 30px rgba(99,102,241,0.08); }
         .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; border-bottom: 1px solid var(--border-glow); padding-bottom: 14px; flex-wrap: wrap; gap: 10px; }
         .panel-header h2 { margin: 0; font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; gap: 12px; }
         .section-grid-2 { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; }
@@ -170,15 +209,16 @@
         .btn-cluster { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 22px; }
         .btn-core { padding: 14px 26px; border-radius: 14px; border: none; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 10px; font-family: var(--font-main); }
         .btn-core:disabled { opacity: .55; cursor: not-allowed; }
-        .btn-primary { background: linear-gradient(135deg, var(--accent-indigo), var(--accent-violet)); color: #fff; box-shadow: 0 4px 18px rgba(99,102,241,0.35); }
-        .btn-primary:hover:not(:disabled) { box-shadow: 0 0 28px rgba(99,102,241,0.55); transform: translateY(-2px); }
+        .btn-primary { background: linear-gradient(135deg, var(--accent-indigo), var(--accent-violet)); color: #fff; box-shadow: 0 4px 18px rgba(99,102,241,0.35); position: relative; }
+        .btn-primary:hover:not(:disabled) { box-shadow: 0 0 16px rgba(255,0,60,.45), 0 0 26px rgba(34,211,238,.4), 0 0 36px rgba(167,139,250,.35); transform: translateY(-2px); animation: btnGlowPulse 1.4s ease-in-out infinite; }
         .btn-primary:active:not(:disabled) { transform: translateY(0) scale(.97); }
         .btn-success { background: rgba(52, 211, 153, 0.15); color: var(--accent-green); border: 1px solid rgba(52, 211, 153, 0.3); }
         .btn-success:hover { background: var(--accent-green); color: #06150f; transform: translateY(-2px); }
         .btn-secondary { background: rgba(255,255,255,0.04); color: var(--text-primary); border: 1px solid var(--border-glow); }
         .btn-secondary:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); transform: translateY(-2px); }
         .btn-gold { background: linear-gradient(135deg, var(--accent-gold), #f59e0b); color: #211400; box-shadow: 0 4px 18px rgba(251,191,36,.35); }
-        .btn-gold:hover { box-shadow: 0 0 26px rgba(251,191,36,.55); transform: translateY(-2px); }
+        .btn-gold:hover { box-shadow: 0 0 16px rgba(255,238,0,.5), 0 0 28px rgba(255,138,0,.4); transform: translateY(-2px); animation: btnGlowPulse 1.4s ease-in-out infinite; }
+        @keyframes btnGlowPulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.18); } }
 
         .terminal-table-container { border: 1px solid var(--border-glow); border-radius: 16px; overflow: hidden; background: rgba(0,0,0,0.2); overflow-x:auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; min-width: 460px; }
@@ -212,7 +252,7 @@
 
         .rank-list { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
         .rank-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border-glow); padding: 13px 18px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
-        .rank-item:hover { transform: translateX(4px); border-color: var(--accent-gold); }
+        .rank-item:hover { transform: translateX(4px); border-color: transparent; box-shadow: 0 0 0 1px var(--accent-gold), 0 0 20px rgba(251,191,36,.3), 0 0 30px rgba(255,138,0,.2); }
         body.light-theme .rank-item { background: #fff; }
         .rank-identity { display:flex; align-items:center; gap:12px; }
         .rank-number { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; background: rgba(148,152,181,.15); color: var(--text-secondary); border: 1px solid var(--border-glow); flex-shrink:0; }
@@ -222,7 +262,8 @@
 
         .section-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; margin: 0 0 18px; display: flex; align-items: center; gap: 12px; }
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
-        .gallery-card { border-radius: 20px; overflow: hidden; border: 1px solid var(--border-glow); position: relative; height: 210px; }
+        .gallery-card { border-radius: 20px; overflow: hidden; border: 1px solid var(--border-glow); position: relative; height: 210px; transition: box-shadow .35s, border-color .35s; }
+        .gallery-card:hover { border-color: transparent; box-shadow: 0 0 0 1px rgba(99,102,241,.5), 0 0 26px rgba(255,0,60,.22), 0 0 40px rgba(34,211,238,.22); }
         .gallery-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease, filter .6s ease; }
         .gallery-card:hover img { transform: scale(1.08); filter: brightness(1.05); }
         .gallery-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #030712, transparent); padding: 18px; color: #fff; }
@@ -230,6 +271,26 @@
 
         .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
         .reveal.in-view { opacity: 1; transform: translateY(0); }
+        .metrics-grid.reveal.in-view, .metrics-grid.reveal { transition: none; opacity: 1; transform: none; }
+        .metrics-grid .reveal { transition-delay: 0s; }
+        .metrics-grid .metric-card:nth-child(1) { transition-delay: .05s; }
+        .metrics-grid .metric-card:nth-child(2) { transition-delay: .15s; }
+        .metrics-grid .metric-card:nth-child(3) { transition-delay: .25s; }
+        .metrics-grid .metric-card:nth-child(4) { transition-delay: .35s; }
+        .gallery-grid .gallery-card:nth-child(1) { transition-delay: .05s; }
+        .gallery-grid .gallery-card:nth-child(2) { transition-delay: .12s; }
+        .gallery-grid .gallery-card:nth-child(3) { transition-delay: .19s; }
+        .gallery-grid .gallery-card:nth-child(4) { transition-delay: .26s; }
+        .gallery-grid .gallery-card:nth-child(5) { transition-delay: .33s; }
+        .gallery-grid .gallery-card:nth-child(6) { transition-delay: .4s; }
+        .gallery-grid .gallery-card:nth-child(n+7) { transition-delay: .47s; }
+        .org-grid .org-card:nth-child(1), .rank-list .rank-item:nth-child(1) { transition-delay: .05s; }
+        .org-grid .org-card:nth-child(2), .rank-list .rank-item:nth-child(2) { transition-delay: .1s; }
+        .org-grid .org-card:nth-child(3), .rank-list .rank-item:nth-child(3) { transition-delay: .15s; }
+        .org-grid .org-card:nth-child(4), .rank-list .rank-item:nth-child(4) { transition-delay: .2s; }
+        .org-grid .org-card:nth-child(5), .rank-list .rank-item:nth-child(5) { transition-delay: .25s; }
+        .org-grid .org-card:nth-child(6), .rank-list .rank-item:nth-child(6) { transition-delay: .3s; }
+        .org-grid .org-card:nth-child(n+7), .rank-list .rank-item:nth-child(n+7) { transition-delay: .35s; }
 
         ::-webkit-scrollbar { width: 10px; height: 10px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -278,7 +339,7 @@
         /* ===== Struktur Organisasi ===== */
         .org-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap:18px; }
         .org-card { text-align:center; padding:24px 16px; border-radius:18px; border:1px solid var(--border-glow); background: var(--card-surface); }
-        .org-card:hover { transform: translateY(-4px); border-color: var(--accent-indigo); box-shadow: var(--shadow-glow); }
+        .org-card:hover { transform: translateY(-4px); border-color: transparent; box-shadow: 0 0 0 1px rgba(99,102,241,.5), 0 0 24px rgba(255,138,0,.25), 0 0 36px rgba(34,211,238,.25); }
         .org-avatar { width:64px; height:64px; border-radius:50%; background: linear-gradient(135deg, var(--accent-indigo), var(--accent-violet)); display:flex; align-items:center; justify-content:center; font-size:1.5rem; color:#fff; margin:0 auto 12px; }
         .org-jabatan { font-size:.75rem; text-transform:uppercase; font-weight:800; color: var(--accent-cyan); letter-spacing:.5px; }
         .org-nama { font-weight:800; margin-top:4px; }
@@ -358,8 +419,38 @@
         <div class="aurora-blob blob-1"></div>
         <div class="aurora-blob blob-2"></div>
         <div class="aurora-blob blob-3"></div>
+        <div class="aurora-blob blob-4"></div>
+        <div class="aurora-blob blob-5"></div>
+        <div class="aurora-blob blob-6"></div>
     </div>
+    <div id="particlesBg"></div>
+    <div id="circuitBg">
+        <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+            <defs>
+                <linearGradient id="circuitGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#6366f1"/>
+                    <stop offset="50%" stop-color="#22d3ee"/>
+                    <stop offset="100%" stop-color="#a78bfa"/>
+                </linearGradient>
+            </defs>
+            <path d="M0,120 H260 L320,180 H620 L680,120 H1000"/>
+            <path d="M0,420 H180 L240,360 H520 L580,420 H1000"/>
+            <path d="M0,700 H340 L400,760 H720 L780,700 H1000"/>
+            <path d="M120,0 V240 L180,300 V1000"/>
+            <path d="M860,0 V180 L800,240 V1000"/>
+            <circle cx="320" cy="180" r="4"/>
+            <circle cx="620" cy="180" r="4"/>
+            <circle cx="240" cy="360" r="4"/>
+            <circle cx="580" cy="420" r="4"/>
+            <circle cx="400" cy="760" r="4"/>
+            <circle cx="780" cy="700" r="4"/>
+            <circle cx="180" cy="300" r="4"/>
+            <circle cx="800" cy="240" r="4"/>
+        </svg>
+    </div>
+    <div id="vignette"></div>
 
+    <div id="rgbStrip"></div>
     <nav>
         <div style="display:flex; align-items:center; gap:14px;">
             <button class="btn-icon" id="hamburgerBtn" onclick="document.getElementById('mainSidebar').classList.toggle('open')"><i class="fa-solid fa-bars"></i></button>
@@ -373,27 +464,28 @@
     </nav>
 
     <main style="max-width: 1500px; margin: 0 auto; padding: 0 20px;">
-        <div class="hero-banner" id="heroBanner">
-            <div><span class="badge-live"><span></span> Online</span></div>
+        <div class="hero-banner reveal" id="heroBanner">
+            <canvas id="heroNetCanvas"></canvas>
+            <div style="position:relative; z-index:2;"><span class="badge-live"><span></span> Online</span></div>
             <h1>Selamat Datang di Kelas XII TKJ 2</h1>
             <p>Tempat kumpul anak XII TKJ 2 buat absen, lihat jadwal, ngecek tugas, baca pengumuman, sampai kas kelas — semuanya di satu halaman.</p>
         </div>
     </main>
 
     <div class="metrics-grid reveal">
-        <div class="metric-card">
+        <div class="metric-card reveal">
             <div class="metric-data"><h3 id="counterHadir">0</h3><span>Hadir Hari Ini</span></div>
             <div class="metric-icon"><i class="fa-solid fa-user-check"></i></div>
         </div>
-        <div class="metric-card">
+        <div class="metric-card reveal">
             <div class="metric-data"><h3 id="counterTotal">27</h3><span>Jumlah Siswa</span></div>
             <div class="metric-icon"><i class="fa-solid fa-users"></i></div>
         </div>
-        <div class="metric-card">
+        <div class="metric-card reveal">
             <div class="metric-data"><h3 id="hariKelulusan">0</h3><span>Hari Menuju Kelulusan</span></div>
             <div class="metric-icon"><i class="fa-solid fa-school-flag"></i></div>
         </div>
-        <div class="metric-card">
+        <div class="metric-card reveal">
             <div class="metric-data" style="font-family: var(--font-code); font-size: 0.78rem; font-weight: 600;">
                 <div style="margin-bottom: 4px;"><i class="fa-solid fa-fingerprint" style="color:var(--accent-indigo)"></i> Identitas: <span style="color: var(--accent-cyan)">Google Account Lock</span></div>
                 <div style="margin-bottom: 4px;"><i class="fa-solid fa-bolt" style="color:var(--accent-green)"></i> Realtime Sync: <span style="color: var(--accent-green)">Firebase Cloud</span></div>
@@ -432,17 +524,17 @@
                                 <div id="jamSekarangWidget" style="font-weight:800; font-size:1.05rem;">Memuat jadwal...</div>
                             </div>
                         </div>
-                        <div class="panel-container">
+                        <div class="panel-container reveal">
                             <div class="panel-header"><h2><i class="fa-solid fa-chart-pie" style="color:var(--accent-cyan)"></i> Statistik Absensi Hari Ini</h2></div>
                             <canvas id="kehadiranChart"></canvas>
                         </div>
                     </div>
                     <div>
-                        <div class="panel-container" style="padding:22px;">
+                        <div class="panel-container reveal" style="padding:22px;">
                             <div class="panel-header" style="margin-bottom:14px; padding-bottom:10px;"><h2 style="font-size:1.05rem;"><i class="fa-solid fa-trophy" style="color:var(--accent-gold)"></i> Top 3 Disiplin</h2></div>
                             <div class="rank-list" id="miniLeaderboard"><div class="empty-state">Belum ada data.</div></div>
                         </div>
-                        <div class="panel-container" style="padding:22px;">
+                        <div class="panel-container reveal" style="padding:22px;">
                             <div class="panel-header" style="margin-bottom:14px; padding-bottom:10px;"><h2 style="font-size:1.05rem;"><i class="fa-solid fa-terminal" style="color:var(--accent-green)"></i> System Live Monitor</h2></div>
                             <div class="log-terminal" id="sysTerminal"><div class="log-line"><span class="log-time">[00:00:00]</span> <span class="log-tag">[SYS]</span> Control Gateway Ready.</div></div>
                         </div>
@@ -452,7 +544,7 @@
 
             <!-- ================= ABSENSI ================= -->
             <section class="app-section" id="sec-absensi">
-                <div class="panel-container">
+                <div class="panel-container reveal">
                     <div class="panel-header">
                         <h2><i class="fa-solid fa-fingerprint" style="color: var(--accent-indigo);"></i> Absensi Harian</h2>
                         <span style="font-family: var(--font-code); font-size: 0.85rem; opacity: 0.7;" id="liveClock">00:00:00</span>
@@ -486,7 +578,7 @@
 
             <!-- ================= JADWAL PELAJARAN ================= -->
             <section class="app-section" id="sec-jadwal">
-                <div class="panel-container">
+                <div class="panel-container reveal">
                     <div class="panel-header"><h2><i class="fa-solid fa-calendar-days" style="color:var(--accent-indigo)"></i> Jadwal Pelajaran</h2></div>
                     <div class="day-tabs" id="dayTabs"></div>
                     <div id="jadwalList"></div>
@@ -495,7 +587,7 @@
 
             <!-- ================= TUGAS & DEADLINE ================= -->
             <section class="app-section" id="sec-tugas">
-                <div class="panel-container">
+                <div class="panel-container reveal">
                     <div class="panel-header"><h2><i class="fa-solid fa-list-check" style="color:var(--accent-indigo)"></i> Tugas & Deadline</h2></div>
                     <div class="form-row">
                         <div><label class="field-label">Mapel</label><input type="text" id="tugasMapel" placeholder="contoh: Basis Data"></div>
@@ -509,7 +601,7 @@
 
             <!-- ================= PENGUMUMAN ================= -->
             <section class="app-section" id="sec-pengumuman">
-                <div class="panel-container">
+                <div class="panel-container reveal">
                     <div class="panel-header"><h2><i class="fa-solid fa-bullhorn" style="color:var(--accent-indigo)"></i> Papan Pengumuman</h2></div>
                     <div class="form-row"><div><label class="field-label">Judul</label><input type="text" id="pengumumanJudul" placeholder="Judul pengumuman"></div></div>
                     <div class="form-row"><div><label class="field-label">Isi</label><textarea id="pengumumanIsi" placeholder="Tulis isi pengumuman di sini..."></textarea></div></div>
@@ -520,7 +612,7 @@
 
             <!-- ================= KAS KELAS ================= -->
             <section class="app-section" id="sec-kas">
-                <div class="panel-container">
+                <div class="panel-container reveal">
                     <div class="panel-header"><h2><i class="fa-solid fa-coins" style="color:var(--accent-indigo)"></i> Kas Kelas</h2></div>
                     <div class="balance-banner"><div style="font-size:.8rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Saldo Saat Ini</div><h2 id="kasSaldo">Rp 0</h2></div>
                     <div class="form-row">
@@ -535,7 +627,7 @@
 
             <!-- ================= STRUKTUR ORGANISASI ================= -->
             <section class="app-section" id="sec-struktur">
-                <div class="panel-container">
+                <div class="panel-container reveal">
                     <div class="panel-header"><h2><i class="fa-solid fa-sitemap" style="color:var(--accent-indigo)"></i> Struktur Organisasi Kelas</h2></div>
                     <div class="org-grid" id="orgGrid"></div>
                 </div>
@@ -543,7 +635,7 @@
 
             <!-- ================= LEADERBOARD ================= -->
             <section class="app-section" id="sec-leaderboard">
-                <div class="panel-container">
+                <div class="panel-container reveal">
                     <div class="panel-header"><h2><i class="fa-solid fa-trophy" style="color:var(--accent-gold)"></i> Top Node Disiplin (Total Hadir Sepanjang Waktu)</h2></div>
                     <p style="color:var(--text-secondary); margin-top:-10px;">Peringkat ini dihitung otomatis dari jumlah hari siswa benar-benar menekan tombol absen — bukan data manual.</p>
                     <div class="rank-list" id="fullLeaderboard"><div class="empty-state">Memuat peringkat...</div></div>
@@ -552,7 +644,7 @@
 
             <!-- ================= POLLING ================= -->
             <section class="app-section" id="sec-polling">
-                <div class="panel-container">
+                <div class="panel-container reveal">
                     <div class="panel-header"><h2><i class="fa-solid fa-square-poll-vertical" style="color:var(--accent-indigo)"></i> Buat Polling Baru</h2></div>
                     <div class="form-row"><div><label class="field-label">Pertanyaan</label><input type="text" id="pollPertanyaan" placeholder="Masukkan pertanyaan polling..."></div></div>
                     <label class="field-label">Pilihan Jawaban</label>
@@ -565,7 +657,7 @@
                         <button class="btn-core btn-primary sheen" onclick="submitNewPoll()"><i class="fa-solid fa-paper-plane"></i> Publikasikan Polling</button>
                     </div>
                 </div>
-                <div class="panel-container">
+                <div class="panel-container reveal">
                     <div class="panel-header"><h2><i class="fa-solid fa-chart-simple" style="color:var(--accent-cyan)"></i> Polling Aktif</h2></div>
                     <div id="pollContainer"><div class="empty-state">Memuat polling...</div></div>
                 </div>
@@ -573,7 +665,7 @@
 
             <!-- ================= ASPIRASI ================= -->
             <section class="app-section" id="sec-aspirasi">
-                <div class="panel-container">
+                <div class="panel-container reveal">
                     <div class="panel-header"><h2><i class="fa-solid fa-comment-dots" style="color:var(--accent-indigo)"></i> Kotak Aspirasi & Saran</h2></div>
                     <div class="form-row"><div style="flex:1 1 100%;"><textarea id="aspirasiIsi" placeholder="Tulis aspirasi, kritik, atau saran buat kelas..."></textarea></div></div>
                     <label style="display:flex; align-items:center; gap:8px; font-size:.85rem; color:var(--text-secondary); margin-bottom:14px; cursor:pointer;"><input type="checkbox" id="aspirasiAnonim" style="width:auto;"> Kirim sebagai anonim</label>
@@ -586,13 +678,13 @@
             <section class="app-section" id="sec-galeri">
                 <h2 class="section-title"><i class="fa-solid fa-images" style="color: var(--accent-cyan)"></i> Galeri TKJ 2</h2>
                 <div class="gallery-grid" id="galeri">
-                    <div class="gallery-card"><img src="foto-kelas-depan-sekolah.jpg" alt="Foto kelas depan sekolah" loading="lazy"><div class="gallery-overlay"><h4>Kebersamaan XII TKJ 2 di Depan Sekolah</h4></div></div>
-                    <div class="gallery-card"><img src="juara-umum-2-yoga-martino.jpg" alt="Juara Umum 2" loading="lazy"><div class="gallery-overlay"><h4>Juara Umum II — Yoga Martino</h4></div></div>
-                    <div class="gallery-card"><img src="hangout-bukber-kelas.jpg" alt="Hangout kelas" loading="lazy"><div class="gallery-overlay"><h4>Hangout Bareng Setelah Pulang Sekolah</h4></div></div>
-                    <div class="gallery-card"><img src="juara-lks-tiga-siswa.jpg" alt="Juara LKS" loading="lazy"><div class="gallery-overlay"><h4>Tiga Siswa Berprestasi: Wandre, Alani & Yoga</h4></div></div>
-                    <div class="gallery-card"><img src="drama-teater-kostum-1.jpg" alt="Drama teater kelas" loading="lazy"><div class="gallery-overlay"><h4>Pentas Drama Tradisional Kelas</h4></div></div>
-                    <div class="gallery-card"><img src="juara-3-lks-provinsi.jpg" alt="Juara 3 LKS Provinsi" loading="lazy"><div class="gallery-overlay"><h4>Juara III LKS Tingkat Provinsi Sumsel</h4></div></div>
-                    <div class="gallery-card"><img src="drama-teater-kostum-2.jpg" alt="Drama teater kelas tampak depan" loading="lazy"><div class="gallery-overlay"><h4>Seluruh Pemain Drama Tradisional</h4></div></div>
+                    <div class="gallery-card reveal"><img src="foto-kelas-depan-sekolah.jpg" alt="Foto kelas depan sekolah" loading="lazy"><div class="gallery-overlay"><h4>Kebersamaan XII TKJ 2 di Depan Sekolah</h4></div></div>
+                    <div class="gallery-card reveal"><img src="juara-umum-2-yoga-martino.jpg" alt="Juara Umum 2" loading="lazy"><div class="gallery-overlay"><h4>Juara Umum II — Yoga Martino</h4></div></div>
+                    <div class="gallery-card reveal"><img src="hangout-bukber-kelas.jpg" alt="Hangout kelas" loading="lazy"><div class="gallery-overlay"><h4>Hangout Bareng Setelah Pulang Sekolah</h4></div></div>
+                    <div class="gallery-card reveal"><img src="juara-lks-tiga-siswa.jpg" alt="Juara LKS" loading="lazy"><div class="gallery-overlay"><h4>Tiga Siswa Berprestasi: Wandre, Alani & Yoga</h4></div></div>
+                    <div class="gallery-card reveal"><img src="drama-teater-kostum-1.jpg" alt="Drama teater kelas" loading="lazy"><div class="gallery-overlay"><h4>Pentas Drama Tradisional Kelas</h4></div></div>
+                    <div class="gallery-card reveal"><img src="juara-3-lks-provinsi.jpg" alt="Juara 3 LKS Provinsi" loading="lazy"><div class="gallery-overlay"><h4>Juara III LKS Tingkat Provinsi Sumsel</h4></div></div>
+                    <div class="gallery-card reveal"><img src="drama-teater-kostum-2.jpg" alt="Drama teater kelas tampak depan" loading="lazy"><div class="gallery-overlay"><h4>Seluruh Pemain Drama Tradisional</h4></div></div>
                 </div>
             </section>
 
@@ -826,8 +918,8 @@
                 return;
             }
             const medalClass = i => i===0?'gold':i===1?'silver':i===2?'bronze':'';
-            if(full) full.innerHTML = arr.slice(0,10).map((r,i) => `<div class="rank-item"><div class="rank-identity"><div class="rank-number ${medalClass(i)}">${i+1}</div><span>${escapeHtml(r.nama)}</span></div><span style="color:var(--accent-green)">${r.totalHadir||0}x Hadir</span></div>`).join('');
-            if(mini) mini.innerHTML = arr.slice(0,3).map((r,i) => `<div class="rank-item"><div class="rank-identity"><div class="rank-number ${medalClass(i)}">${i+1}</div><span>${escapeHtml(r.nama)}</span></div><span style="color:var(--accent-green)">${r.totalHadir||0}x</span></div>`).join('');
+            if(full) full.innerHTML = arr.slice(0,10).map((r,i) => `<div class="rank-item reveal"><div class="rank-identity"><div class="rank-number ${medalClass(i)}">${i+1}</div><span>${escapeHtml(r.nama)}</span></div><span style="color:var(--accent-green)">${r.totalHadir||0}x Hadir</span></div>`).join('');
+            if(mini) mini.innerHTML = arr.slice(0,3).map((r,i) => `<div class="rank-item reveal"><div class="rank-identity"><div class="rank-number ${medalClass(i)}">${i+1}</div><span>${escapeHtml(r.nama)}</span></div><span style="color:var(--accent-green)">${r.totalHadir||0}x</span></div>`).join('');
         }
         if(db) {
             db.ref('rekap').on('value', snap => renderLeaderboard(snap.val()));
@@ -968,7 +1060,7 @@
             { jabatan: 'Sekretaris', nama: 'Hawa Ama Daris', icon: 'pen' },
             { jabatan: 'Bendahara', nama: 'Indri Widya Sari', icon: 'coins' }
         ];
-        document.getElementById('orgGrid').innerHTML = STRUKTUR_KELAS.map(o => `<div class="org-card"><div class="org-avatar"><i class="fa-solid fa-${o.icon}"></i></div><div class="org-jabatan">${escapeHtml(o.jabatan)}</div><div class="org-nama">${escapeHtml(o.nama)}</div></div>`).join('');
+        document.getElementById('orgGrid').innerHTML = STRUKTUR_KELAS.map(o => `<div class="org-card reveal"><div class="org-avatar"><i class="fa-solid fa-${o.icon}"></i></div><div class="org-jabatan">${escapeHtml(o.jabatan)}</div><div class="org-nama">${escapeHtml(o.nama)}</div></div>`).join('');
 
         // ================= POLLING KELAS (multi-poll, bisa bikin sendiri) =================
         function addPollOptionInput() {
@@ -1027,7 +1119,7 @@
                     </div>`;
                 }).join('');
                 const delBtn = (currentUser && data.ownerUid === currentUser.uid) ? `<button class="mini-del" onclick="deletePoll('${pollId}')"><i class="fa-solid fa-trash"></i></button>` : '';
-                return `<div class="panel-container" style="margin-bottom:18px;">
+                return `<div class="panel-container reveal" style="margin-bottom:18px;">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
                         <div class="poll-question" style="margin-bottom:4px;">${escapeHtml(data.pertanyaan)}</div>
                         ${delBtn}
@@ -1092,11 +1184,148 @@
             });
         }
 
-        // Scroll-reveal
+        // Signature: live-looking node network animating inside the hero, echoing the class's networking theme
+        // Full-page ambient particle starfield — small glowing "data bits" drifting upward
+        (function initParticles() {
+            const wrap = document.getElementById('particlesBg');
+            if (!wrap) return;
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const colors = ['#ff2d6a', '#ff8a00', '#ffee00', '#34d399', '#22d3ee', '#6366f1', '#a78bfa'];
+            const count = window.innerWidth < 640 ? 22 : 42;
+            for (let i = 0; i < count; i++) {
+                const p = document.createElement('div');
+                p.className = 'data-particle';
+                const size = 1.5 + Math.random() * 2.5;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const floatDur = 14 + Math.random() * 22;
+                const twinkleDur = 2 + Math.random() * 3;
+                p.style.cssText = `left:${Math.random() * 100}%; top:${100 + Math.random() * 20}%; width:${size}px; height:${size}px; background:${color}; box-shadow:0 0 ${size * 3}px ${color}; animation-duration:${floatDur}s, ${twinkleDur}s; animation-delay:${-Math.random() * floatDur}s, ${-Math.random() * twinkleDur}s;`;
+                if (reduceMotion) p.style.animation = 'none';
+                wrap.appendChild(p);
+            }
+        })();
+
+        (function initHeroNetwork() {
+            const canvas = document.getElementById('heroNetCanvas');
+            if (!canvas || !heroBanner) return;
+            const ctx = canvas.getContext('2d');
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            let w, h, nodes = [];
+            const colors = ['255,0,60', '255,138,0', '255,238,0', '52,211,153', '34,211,238', '99,102,241', '167,139,250'];
+            function resize() {
+                w = canvas.width = heroBanner.clientWidth * devicePixelRatio;
+                h = canvas.height = heroBanner.clientHeight * devicePixelRatio;
+                canvas.style.width = heroBanner.clientWidth + 'px';
+                canvas.style.height = heroBanner.clientHeight + 'px';
+                const count = Math.max(18, Math.round((heroBanner.clientWidth * heroBanner.clientHeight) / 26000));
+                nodes = Array.from({ length: count }, () => ({
+                    x: Math.random() * w, y: Math.random() * h,
+                    vx: (Math.random() - 0.5) * 0.25 * devicePixelRatio,
+                    vy: (Math.random() - 0.5) * 0.25 * devicePixelRatio,
+                    c: colors[Math.floor(Math.random() * colors.length)]
+                }));
+            }
+            function frame() {
+                ctx.clearRect(0, 0, w, h);
+                const linkDist = 150 * devicePixelRatio;
+                for (let i = 0; i < nodes.length; i++) {
+                    const n = nodes[i];
+                    n.x += n.vx; n.y += n.vy;
+                    if (n.x < 0 || n.x > w) n.vx *= -1;
+                    if (n.y < 0 || n.y > h) n.vy *= -1;
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const m = nodes[j];
+                        const dx = n.x - m.x, dy = n.y - m.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < linkDist) {
+                            ctx.strokeStyle = `rgba(${n.c}, ${(1 - dist / linkDist) * 0.35})`;
+                            ctx.lineWidth = 1;
+                            ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(m.x, m.y); ctx.stroke();
+                        }
+                    }
+                }
+                for (const n of nodes) {
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, 1.8 * devicePixelRatio, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${n.c}, 0.85)`;
+                    ctx.fill();
+                }
+                if (!reduceMotion) requestAnimationFrame(frame);
+            }
+            resize();
+            frame();
+            window.addEventListener('resize', resize);
+        })();
+
+        // Subtle 3D tilt on hover for metric & gallery cards — a small tactile "premium" touch
+        (function initTilt() {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            document.body.style.setProperty('perspective', '1000px');
+            function attachTilt(el) {
+                el.style.transformStyle = 'preserve-3d';
+                el.addEventListener('mousemove', (e) => {
+                    const r = el.getBoundingClientRect();
+                    const px = (e.clientX - r.left) / r.width - 0.5;
+                    const py = (e.clientY - r.top) / r.height - 0.5;
+                    el.style.transform = `perspective(700px) rotateX(${-py * 6}deg) rotateY(${px * 6}deg) translateY(-4px)`;
+                });
+                el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+            }
+            document.querySelectorAll('.metric-card, .gallery-card').forEach(el => { el.setAttribute('data-tilt', '1'); attachTilt(el); });
+            new MutationObserver(() => document.querySelectorAll('.metric-card:not([data-tilt]), .gallery-card:not([data-tilt])').forEach(el => { el.setAttribute('data-tilt', '1'); attachTilt(el); })).observe(document.body, { childList: true, subtree: true });
+        })();
+        (function initCounterAnimation() {
+            const targets = document.querySelectorAll('#counterHadir, #counterTotal, #hariKelulusan');
+            const animated = new WeakSet();
+            function animateCount(el) {
+                if (animated.has(el)) return;
+                animated.add(el);
+                const end = parseInt(el.textContent, 10) || 0;
+                if (end <= 0) return;
+                const duration = 900;
+                const start = performance.now();
+                function step(now) {
+                    const p = Math.min((now - start) / duration, 1);
+                    const eased = 1 - Math.pow(1 - p, 3);
+                    el.textContent = Math.round(end * eased);
+                    if (p < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+            }
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) { animateCount(entry.target); counterObserver.unobserve(entry.target); } });
+            }, { threshold: 0.5 });
+            targets.forEach(el => counterObserver.observe(el));
+            // Re-check periodically since these counters get their real values asynchronously from Firebase
+            const recheck = setInterval(() => { targets.forEach(el => counterObserver.observe(el)); }, 1500);
+            setTimeout(() => clearInterval(recheck), 15000);
+        })();
+
+        // Scroll-reveal (auto-picks up cards rendered later by Firebase, e.g. leaderboard/org chart)
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in-view'); revealObserver.unobserve(entry.target); } });
         }, { threshold: 0.12 });
-        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+        function observeReveals() { document.querySelectorAll('.reveal:not(.in-view)').forEach(el => revealObserver.observe(el)); }
+        observeReveals();
+        new MutationObserver(() => observeReveals()).observe(document.body, { childList: true, subtree: true });
+
+        // Ambient parallax: aurora blobs drift slightly with scroll for a richer sense of depth
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            let latestScrollY = 0, tickingScroll = false;
+            window.addEventListener('scroll', () => {
+                latestScrollY = window.scrollY;
+                if (!tickingScroll) {
+                    requestAnimationFrame(() => {
+                        const auroraWrap = document.getElementById('auroraBg');
+                        if (auroraWrap) auroraWrap.style.transform = `translateY(${latestScrollY * 0.05}px)`;
+                        const circuit = document.querySelector('#circuitBg svg');
+                        if (circuit) circuit.style.transform = `translateY(${latestScrollY * 0.02}px)`;
+                        tickingScroll = false;
+                    });
+                    tickingScroll = true;
+                }
+            }, { passive: true });
+        }
 
         // ================= GOOGLE SIGN-IN =================
         function updateAuthUI(user) {
